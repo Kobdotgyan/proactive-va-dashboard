@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ProActive Technical Virtual Assistant Dashboard for client and task management.">
+    <title>ProActive VA Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>ProActive VA</h2>
+                <p>Technical Assistant Suite</p>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#clients">Client Directory</a></li>
+                    <li><a href="#templates">Email Templates</a></li>
+                    <li><a href="#settings">Settings</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <p>Kwabena Gyan-Kyereko</p>
+                <span>Technical VA</span>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Header -->
+            <header class="top-bar">
+                <h1>Dashboard Overview</h1>
+                <button id="add-task-btn" class="btn-primary">+ New Task</button>
+            </header>
+
+            <!-- Stats Row -->
+            <section class="stats-row">
+                <div class="stat-card">
+                    <h3>Active Clients</h3>
+                    <p id="stat-clients" class="stat-number">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Tasks</h3>
+                    <p id="stat-pending" class="stat-number">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Completed This Week</h3>
+                    <p id="stat-completed" class="stat-number">0</p>
+                </div>
+            </section>
+
+            <!-- Two Column Layout: Intake and Tasks -->
+            <div class="dashboard-grid">
+                
+                <!-- Client Intake Form -->
+                <section class="card intake-card">
+                    <h2>New Client Intake</h2>
+                    <form id="client-intake-form">
+                        <div class="form-group">
+                            <label for="client-name">Client / Company Name</label>
+                            <input type="text" id="client-name" required placeholder="e.g., Acme Corp">
+                        </div>
+                        <div class="form-group">
+                            <label for="client-email">Primary Email</label>
+                            <input type="email" id="client-email" required placeholder="contact@acme.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="service-type">Service Required</label>
+                            <select id="service-type" required>
+                                <option value="">Select a service...</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Database Management">Database Management</option>
+                                <option value="Administrative Support">Administrative Support</option>
+                                <option value="Research & Analysis">Research & Analysis</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-secondary">Add Client</button>
+                    </form>
+                </section>
+
+                <!-- Task Management Board -->
+                <section class="card task-board">
+                    <div class="task-board-header">
+                        <h2>Active Tasks</h2>
+                        <span id="task-results-count" class="task-results-count">0 tasks</span>
+                    </div>
+
+                    <div class="task-toolbar">
+                        <div class="toolbar-field search-field">
+                            <label for="task-search">Search</label>
+                            <input type="search" id="task-search" placeholder="Search by task or client">
+                        </div>
+
+                        <div class="toolbar-field">
+                            <label for="task-status-filter">Status</label>
+                            <select id="task-status-filter">
+                                <option value="all">All Statuses</option>
+                                <option value="todo">To Do</option>
+                                <option value="inprogress">In Progress</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+
+                        <div class="toolbar-field">
+                            <label for="task-priority-filter">Priority</label>
+                            <select id="task-priority-filter">
+                                <option value="all">All Priorities</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+
+                        <button id="clear-task-filters" type="button" class="btn-clear">Clear</button>
+                    </div>
+
+                    <div id="task-list" class="task-list">
+                        <!-- Tasks will be injected here by JavaScript -->
+                        <p class="empty-state">No active tasks. Add a new task to get started.</p>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <div id="task-modal" class="task-modal hidden" aria-hidden="true">
+        <div class="task-modal-content">
+            <button type="button" id="close-task-modal" class="close-modal" aria-label="Close task form">&times;</button>
+            <h3 id="task-modal-title">Create New Task</h3>
+            <form id="task-form">
+                <input type="hidden" id="task-id">
+
+                <div class="form-group">
+                    <label for="task-title">Task Title</label>
+                    <input type="text" id="task-title" required placeholder="e.g., Draft client onboarding checklist">
+                </div>
+
+                <div class="form-group">
+                    <label for="task-client">Assign Client</label>
+                    <select id="task-client" required>
+                        <option value="">Select a client...</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="task-due-date">Due Date</label>
+                        <input type="date" id="task-due-date">
+                    </div>
+
+                    <div class="form-group half-width">
+                        <label for="task-status">Status</label>
+                        <select id="task-status">
+                            <option value="todo">To Do</option>
+                            <option value="inprogress">In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority">
+                            <option value="high">High</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group half-width">
+                        <label for="task-tags">Tags</label>
+                        <input type="text" id="task-tags" placeholder="e.g. follow-up, admin">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-notes">Task Notes</label>
+                    <textarea id="task-notes" rows="3" placeholder="Add notes, next steps, or client context..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary modal-submit">Save Task</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="success-toast" class="success-toast" aria-live="polite">Task created successfully.</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
